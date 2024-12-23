@@ -7,4 +7,6 @@ public class ProductConstants {
     public static String DATA_FETCH = "Data fetch successfully .. !";
     public static String PRODUCT_NOT_FOUND = "Product not found .. !";
     public static String PRODUCT_DELETED = "Product deleted successfully .. !";
+    public static String PRODUCT_UPDATED = "Product updated successfully .. !";
+    public static String PRODUCT_ID_NOT_FOUND= "Product id not found .. !";
 }

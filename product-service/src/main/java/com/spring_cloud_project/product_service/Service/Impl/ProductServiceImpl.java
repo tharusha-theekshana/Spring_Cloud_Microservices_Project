@@ -28,7 +28,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ResponseEntity<ApiResponse<Product>> createProduct(ProductRequest productRequest) {
-        try{
+        try {
             Product product = Product.builder()
                     .name(productRequest.getName())
                     .description(productRequest.getDescription())
@@ -36,57 +36,78 @@ public class ProductServiceImpl implements ProductService {
                     .build();
 
             productRepo.save(product);
-            return ApiResponseGenerate.createSuccessResponse(product,ProductConstants.PRODUCT_CREATED, HttpStatus.CREATED);
+            return ApiResponseGenerate.createSuccessResponse(product, ProductConstants.PRODUCT_CREATED, HttpStatus.CREATED);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return ApiResponseGenerate.createErrorResponse(ProductConstants.SOMETHING_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
+        return ApiResponseGenerate.createErrorResponse(ProductConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Override
     public ResponseEntity<ApiResponse<List<Product>>> getAllProducts() {
-        try{
+        try {
             List<Product> productList = productRepo.findAll();
-            return ApiResponseGenerate.createSuccessResponseForList(productList,ProductConstants.DATA_FETCH, HttpStatus.OK);
+            return ApiResponseGenerate.createSuccessResponseForList(productList, ProductConstants.DATA_FETCH, HttpStatus.OK);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return ApiResponseGenerate.createErrorResponseForList(new ArrayList<>(), ProductConstants.SOMETHING_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
+        return ApiResponseGenerate.createErrorResponseForList(new ArrayList<>(), ProductConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Override
-    public ResponseEntity<ApiResponse<Optional<Product>>>getProductById(String id) {
-        try{
-           Optional<Product> product = productRepo.findById(id);
+    public ResponseEntity<ApiResponse<Optional<Product>>> getProductById(String id) {
+        try {
+            Optional<Product> product = productRepo.findById(id);
 
-           if (product.isEmpty()){
-               return ApiResponseGenerate.createSuccessResponse(null,ProductConstants.PRODUCT_NOT_FOUND, HttpStatus.NOT_FOUND);
-           }else{
-               return ApiResponseGenerate.createSuccessResponse(product,ProductConstants.DATA_FETCH, HttpStatus.OK);
-           }
-        }catch (Exception e){
+            if (product.isEmpty()) {
+                return ApiResponseGenerate.createSuccessResponse(null, ProductConstants.PRODUCT_NOT_FOUND, HttpStatus.NOT_FOUND);
+            } else {
+                return ApiResponseGenerate.createSuccessResponse(product, ProductConstants.DATA_FETCH, HttpStatus.OK);
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return ApiResponseGenerate.createErrorResponse(ProductConstants.SOMETHING_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
+        return ApiResponseGenerate.createErrorResponse(ProductConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Override
     public ResponseEntity<ApiResponse<Optional<Product>>> deleteProductById(String id) {
-        try{
+        try {
             Optional<Product> product = productRepo.findById(id);
 
-            if (product.isEmpty()){
-                return ApiResponseGenerate.createSuccessResponse(null,ProductConstants.PRODUCT_NOT_FOUND, HttpStatus.NOT_FOUND);
-            }else{
+            if (product.isEmpty()) {
+                return ApiResponseGenerate.createSuccessResponse(null, ProductConstants.PRODUCT_NOT_FOUND, HttpStatus.NOT_FOUND);
+            } else {
                 productRepo.deleteById(id);
-                return ApiResponseGenerate.createSuccessResponse(product,ProductConstants.PRODUCT_DELETED, HttpStatus.OK);
+                return ApiResponseGenerate.createSuccessResponse(product, ProductConstants.PRODUCT_DELETED, HttpStatus.OK);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return ApiResponseGenerate.createErrorResponse(ProductConstants.SOMETHING_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
+        return ApiResponseGenerate.createErrorResponse(ProductConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<ApiResponse<Product>> updateProduct(String id, ProductRequest productRequest) {
+        try {
+            Optional<Product> product = productRepo.findById(id);
+
+            if (product.isEmpty()) {
+                return ApiResponseGenerate.createSuccessResponse(null, ProductConstants.PRODUCT_ID_NOT_FOUND, HttpStatus.NOT_FOUND);
+            } else {
+                product.get().setName(productRequest.getName());
+                product.get().setDescription(productRequest.getDescription());
+                product.get().setPrice(productRequest.getPrice());
+                productRepo.save(product.get());
+
+                return ApiResponseGenerate.createSuccessResponse(product.get(), ProductConstants.PRODUCT_UPDATED, HttpStatus.CREATED);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ApiResponseGenerate.createErrorResponse(ProductConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 

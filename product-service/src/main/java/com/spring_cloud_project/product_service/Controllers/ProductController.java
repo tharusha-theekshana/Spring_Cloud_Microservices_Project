@@ -64,4 +64,13 @@ public class ProductController {
         return ApiResponseGenerate.createErrorResponse(ProductConstants.SOMETHING_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<Product>> updateProduct(@PathVariable("id") String id,@RequestBody ProductRequest productRequest){
+        try{
+            return productService.updateProduct(id,productRequest);
+        }catch (Exception e){
+            e.printStackTrace();
+            return ApiResponseGenerate.createErrorResponse(ProductConstants.SOMETHING_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

@@ -13,4 +13,5 @@ public interface ProductService {
     ResponseEntity<ApiResponse<List<Product>>>  getAllProducts();
     ResponseEntity<ApiResponse<Optional<Product>>> getProductById(String id);
     ResponseEntity<ApiResponse<Optional<Product>>> deleteProductById(String id);
+    ResponseEntity<ApiResponse<Product>> updateProduct(String id, ProductRequest productRequest);
 }
