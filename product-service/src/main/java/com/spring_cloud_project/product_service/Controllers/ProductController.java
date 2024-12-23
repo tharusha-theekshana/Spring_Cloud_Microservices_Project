@@ -5,11 +5,14 @@ import com.spring_cloud_project.product_service.Models.Product;
 import com.spring_cloud_project.product_service.Service.ProductService;
 import com.spring_cloud_project.product_service.Utils.ApiResponse;
 import com.spring_cloud_project.product_service.Utils.ApiResponseGenerate;
+import com.spring_cloud_project.product_service.Utils.ProductConstants;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/product")
@@ -27,7 +30,7 @@ public class ProductController {
             return productService.createProduct(productRequest);
         }catch (Exception e){
             e.printStackTrace();
-            return ApiResponseGenerate.createErrorResponse("Something Went Wrong.",HttpStatus.INTERNAL_SERVER_ERROR);
+            return ApiResponseGenerate.createErrorResponse(ProductConstants.SOMETHING_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -37,9 +40,18 @@ public class ProductController {
             return productService.getAllProducts();
         }catch (Exception e){
             e.printStackTrace();
-            return ApiResponseGenerate.createErrorResponseForList(null,"Something Went Wrong.",HttpStatus.INTERNAL_SERVER_ERROR);
+            return ApiResponseGenerate.createErrorResponseForList(null,ProductConstants.SOMETHING_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<Optional<Product>>> getProductById(@PathVariable("id") String id) {
+        try{
+            return productService.getProductById(id);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return ApiResponseGenerate.createErrorResponse(ProductConstants.SOMETHING_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
 }

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Builder
@@ -54,4 +55,22 @@ public class ProductServiceImpl implements ProductService {
         }
         return ApiResponseGenerate.createErrorResponseForList(new ArrayList<>(), ProductConstants.SOMETHING_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @Override
+    public ResponseEntity<ApiResponse<Optional<Product>>>getProductById(String id) {
+        try{
+           Optional<Product> product = productRepo.findById(id);
+
+           if (product.isEmpty()){
+               return ApiResponseGenerate.createSuccessResponse(null,ProductConstants.PRODUCT_NOT_FOUND, HttpStatus.NOT_FOUND);
+           }else{
+               return ApiResponseGenerate.createSuccessResponse(product,ProductConstants.DATA_FETCH, HttpStatus.OK);
+           }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return ApiResponseGenerate.createErrorResponse(ProductConstants.SOMETHING_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+
 }

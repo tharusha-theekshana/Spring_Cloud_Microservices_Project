@@ -6,8 +6,10 @@ import com.spring_cloud_project.product_service.Utils.ApiResponse;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ProductService {
     ResponseEntity<ApiResponse<Product>> createProduct(ProductRequest productRequest);
     ResponseEntity<ApiResponse<List<Product>>>  getAllProducts();
+    ResponseEntity<ApiResponse<Optional<Product>>> getProductById(String id);
 }
