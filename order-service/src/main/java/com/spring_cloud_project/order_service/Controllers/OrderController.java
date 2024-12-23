@@ -8,10 +8,9 @@ import com.spring_cloud_project.order_service.Utils.ApiResponseGenerate;
 import com.spring_cloud_project.order_service.Utils.OrderConstants;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/order")
@@ -31,4 +30,15 @@ public class OrderController {
         }
         return ApiResponseGenerate.createErrorResponse(OrderConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<Order>>>  getAllOrders(){
+        try{
+            return orderService.getAllOrders();
+        }catch (Exception e){
+            e.printStackTrace();
+            return ApiResponseGenerate.createErrorResponseForList(null,OrderConstants.SOMETHING_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

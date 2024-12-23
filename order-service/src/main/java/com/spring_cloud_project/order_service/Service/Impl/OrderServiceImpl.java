@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -34,6 +35,18 @@ public class OrderServiceImpl implements OrderService {
 
             orderRepo.save(order);
             return ApiResponseGenerate.createSuccessResponse(order,OrderConstants.ORDER_CREATED, HttpStatus.CREATED);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return ApiResponseGenerate.createErrorResponse(OrderConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<ApiResponse<List<Order>>> getAllOrders() {
+        try{
+            List<Order> orderList = orderRepo.findAll();
+            return ApiResponseGenerate.createSuccessResponseForList(orderList,OrderConstants.DATA_FETCH, HttpStatus.OK);
 
         }catch (Exception e){
             e.printStackTrace();
