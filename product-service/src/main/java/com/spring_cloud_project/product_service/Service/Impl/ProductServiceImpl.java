@@ -1,0 +1,57 @@
+package com.spring_cloud_project.product_service.Service.Impl;
+
+import com.spring_cloud_project.product_service.Dto.ProductRequest;
+import com.spring_cloud_project.product_service.Models.Product;
+import com.spring_cloud_project.product_service.Repository.ProductRepo;
+import com.spring_cloud_project.product_service.Service.ProductService;
+import com.spring_cloud_project.product_service.Utils.ApiResponse;
+import com.spring_cloud_project.product_service.Utils.ApiResponseGenerate;
+import com.spring_cloud_project.product_service.Utils.ProductConstants;
+import lombok.Builder;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Service
+@Builder
+public class ProductServiceImpl implements ProductService {
+
+    private ProductRepo productRepo;
+
+    public ProductServiceImpl(ProductRepo productRepo) {
+        this.productRepo = productRepo;
+    }
+
+    @Override
+    public ResponseEntity<ApiResponse<Product>> createProduct(ProductRequest productRequest) {
+        try{
+            Product product = Product.builder()
+                    .name(productRequest.getName())
+                    .description(productRequest.getDescription())
+                    .price(productRequest.getPrice())
+                    .build();
+
+            productRepo.save(product);
+            return ApiResponseGenerate.createSuccessResponse(product,ProductConstants.PRODUCT_CREATE, HttpStatus.CREATED);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return ApiResponseGenerate.createErrorResponse(ProductConstants.SOMETHING_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<ApiResponse<List<Product>>> getAllProducts() {
+        try{
+            List<Product> productList = productRepo.findAll();
+            return ApiResponseGenerate.createSuccessResponseForList(productList,ProductConstants.DATA_FETCH, HttpStatus.OK);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return ApiResponseGenerate.createErrorResponseForList(new ArrayList<>(), ProductConstants.SOMETHING_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
