@@ -52,4 +52,15 @@ public class OrderController {
         return ApiResponseGenerate.createErrorResponse(OrderConstants.SOMETHING_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<Optional<Order>>> deleteProductById(@PathVariable("id") Long id) {
+        try{
+            return orderService.deleteOrderById(id);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return ApiResponseGenerate.createErrorResponse(OrderConstants.SOMETHING_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+
 }

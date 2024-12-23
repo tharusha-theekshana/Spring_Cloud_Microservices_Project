@@ -12,4 +12,5 @@ public interface OrderService {
     ResponseEntity<ApiResponse<Order>> createOrder(OrderRequest orderRequest);
     ResponseEntity<ApiResponse<List<Order>>> getAllOrders();
     ResponseEntity<ApiResponse<Optional<Order>>> getOrderById(Long id);
+    ResponseEntity<ApiResponse<Optional<Order>>> deleteOrderById(Long id);
 }

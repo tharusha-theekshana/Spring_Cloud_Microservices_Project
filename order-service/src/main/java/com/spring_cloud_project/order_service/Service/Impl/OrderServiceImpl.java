@@ -71,4 +71,21 @@ public class OrderServiceImpl implements OrderService {
         }
         return ApiResponseGenerate.createErrorResponse(OrderConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @Override
+    public ResponseEntity<ApiResponse<Optional<Order>>> deleteOrderById(Long id) {
+        try {
+            Optional<Order> order = orderRepo.findById(id);
+
+            if (order.isEmpty()) {
+                return ApiResponseGenerate.createSuccessResponse(null, OrderConstants.ORDER_ID_NOT_FOUND, HttpStatus.NOT_FOUND);
+            } else {
+                orderRepo.deleteById(id);
+                return ApiResponseGenerate.createSuccessResponse(order, OrderConstants.ORDER_DELETED, HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ApiResponseGenerate.createErrorResponse(OrderConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
