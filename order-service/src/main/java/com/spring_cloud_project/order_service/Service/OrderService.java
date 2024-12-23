@@ -6,8 +6,10 @@ import com.spring_cloud_project.order_service.Utils.ApiResponse;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface OrderService {
     ResponseEntity<ApiResponse<Order>> createOrder(OrderRequest orderRequest);
     ResponseEntity<ApiResponse<List<Order>>> getAllOrders();
+    ResponseEntity<ApiResponse<Optional<Order>>> getOrderById(Long id);
 }

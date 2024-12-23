@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/order")
@@ -39,6 +40,16 @@ public class OrderController {
             e.printStackTrace();
             return ApiResponseGenerate.createErrorResponseForList(null,OrderConstants.SOMETHING_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<Optional<Order>>> getProductById(@PathVariable("id") Long id) {
+        try{
+            return orderService.getOrderById(id);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return ApiResponseGenerate.createErrorResponse(OrderConstants.SOMETHING_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }

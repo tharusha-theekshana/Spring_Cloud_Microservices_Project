@@ -7,11 +7,13 @@ import com.spring_cloud_project.order_service.Service.OrderService;
 import com.spring_cloud_project.order_service.Utils.ApiResponse;
 import com.spring_cloud_project.order_service.Utils.ApiResponseGenerate;
 import com.spring_cloud_project.order_service.Utils.OrderConstants;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -49,6 +51,22 @@ public class OrderServiceImpl implements OrderService {
             return ApiResponseGenerate.createSuccessResponseForList(orderList,OrderConstants.DATA_FETCH, HttpStatus.OK);
 
         }catch (Exception e){
+            e.printStackTrace();
+        }
+        return ApiResponseGenerate.createErrorResponse(OrderConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<ApiResponse<Optional<Order>>> getOrderById(Long id) {
+        try {
+            Optional<Order> order = orderRepo.findById(id);
+
+            if (order.isEmpty()) {
+                return ApiResponseGenerate.createSuccessResponse(null, OrderConstants.ORDER_NOT_FOUND, HttpStatus.NOT_FOUND);
+            } else {
+                return ApiResponseGenerate.createSuccessResponse(order,OrderConstants.DATA_FETCH, HttpStatus.OK);
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return ApiResponseGenerate.createErrorResponse(OrderConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
