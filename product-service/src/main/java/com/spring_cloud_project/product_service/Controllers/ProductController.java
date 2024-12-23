@@ -54,4 +54,14 @@ public class ProductController {
         return ApiResponseGenerate.createErrorResponse(ProductConstants.SOMETHING_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<Optional<Product>>> deleteProductById(@PathVariable("id") String id) {
+        try{
+            return productService.deleteProductById(id);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return ApiResponseGenerate.createErrorResponse(ProductConstants.SOMETHING_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 }

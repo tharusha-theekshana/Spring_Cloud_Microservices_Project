@@ -36,7 +36,7 @@ public class ProductServiceImpl implements ProductService {
                     .build();
 
             productRepo.save(product);
-            return ApiResponseGenerate.createSuccessResponse(product,ProductConstants.PRODUCT_CREATE, HttpStatus.CREATED);
+            return ApiResponseGenerate.createSuccessResponse(product,ProductConstants.PRODUCT_CREATED, HttpStatus.CREATED);
 
         }catch (Exception e){
             e.printStackTrace();
@@ -66,6 +66,23 @@ public class ProductServiceImpl implements ProductService {
            }else{
                return ApiResponseGenerate.createSuccessResponse(product,ProductConstants.DATA_FETCH, HttpStatus.OK);
            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return ApiResponseGenerate.createErrorResponse(ProductConstants.SOMETHING_WENT_WRONG,HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<ApiResponse<Optional<Product>>> deleteProductById(String id) {
+        try{
+            Optional<Product> product = productRepo.findById(id);
+
+            if (product.isEmpty()){
+                return ApiResponseGenerate.createSuccessResponse(null,ProductConstants.PRODUCT_NOT_FOUND, HttpStatus.NOT_FOUND);
+            }else{
+                productRepo.deleteById(id);
+                return ApiResponseGenerate.createSuccessResponse(product,ProductConstants.PRODUCT_DELETED, HttpStatus.OK);
+            }
         }catch (Exception e){
             e.printStackTrace();
         }

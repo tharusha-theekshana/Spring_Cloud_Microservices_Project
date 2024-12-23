@@ -12,4 +12,5 @@ public interface ProductService {
     ResponseEntity<ApiResponse<Product>> createProduct(ProductRequest productRequest);
     ResponseEntity<ApiResponse<List<Product>>>  getAllProducts();
     ResponseEntity<ApiResponse<Optional<Product>>> getProductById(String id);
+    ResponseEntity<ApiResponse<Optional<Product>>> deleteProductById(String id);
 }
